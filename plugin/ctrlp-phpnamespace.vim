@@ -96,7 +96,6 @@ function! DoPhpInsertUse(fqcn)
         " Because the ctrlp is async, we need this to jump back to insert
         if g:backToInsert
             let g:backToInsert = 0
-            echom "Going back to insert"
             call feedkeys('a', 'n')
         endif
     endtry

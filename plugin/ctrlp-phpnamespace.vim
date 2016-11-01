@@ -37,6 +37,7 @@ function! PhpFindFqcnAndInsert(clazz)
           if tag.namespace != ""
             let result = tag.namespace.'\'.tag.name
           endif
+          let result = result."\t[".tag.kind."]"
           let results = results + [result]
         endfor
 
@@ -75,7 +76,15 @@ function! DoPhpInsertUse(fqcn)
             echo "fully qualified class name was not found"
             return
         endif
-        let use = "use ".a:fqcn.";"
+
+        let parts = split(a:fqcn)
+
+        if parts[1] == "[f]"
+            let use = "use function ".parts[0].";"
+        else
+            let use = "use ".parts[0].";"
+        endif
+
         " insert after last use or namespace or <?php
         if search('^use\_s\_[[:alnum:][:blank:]\\_]*;', 'be') > 0
             call append(line('.'), use)
